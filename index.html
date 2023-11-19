@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html >
+<!--From https://codepen.io/frytyler/pen/EGdtg-->
+<head>
+  <meta charset="UTF-8">
+  <title>ML API</title>
+  <link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Hind:300' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+  
+<style>
+  form {
+      margin: auto;
+      width: 70%;
+  /* border: 1px solid white; */
+  }
+  .result {
+      margin: auto;
+      width: 35%;
+      border: 1px solid #ccc;
+  }
+  
+  ::placeholder
+  {
+    color: #28282B;
+  }
+  body {
+    
+    background-image:url('https://news.yale.edu/sites/default/files/styles/in_/public/adobestock_170883795_ynews-in-focus.jpeg?itok=pc0AYuha&c=6cbf340b08e67289e94a0b1beffa5aae');
+    /* background-image: url('https://www.wellandgood.com/wp-content/uploads/2019/10/GettyImages-breast-cancer-awareness-disease-prevention-PrakasitKhuansuwan-EyeEm.jpeg'); */
+    /* background-image: url('https://img.freepik.com/free-photo/world-cancer-day-breast-cancer-awareness-ribbon-white-backg_1232-3613.jpg?w=740&t=st=1668298001~exp=1668298601~hmac=c9a3978f8e844867bcbc102e5876130c2bd713ab8d8a297b753f61d08b625347'); */
+    /* background-image: url('https://img.freepik.com/free-photo/breast-cancer-awareness-woman-pink-t-shirt-with-satin-pink-ribbon-her-chest-supporting-symbolbreast-cancer-awareness_1150-18882.jpg?w=740&t=st=1668297749~exp=1668298349~hmac=b6cc7579a2884a59e987e87d3b21257a518688f9daa33e1931afdb8475e74470'); */
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    color: Black;
+    
+  
+  }
+  placeholder-shown{
+    border: 0px;
+  }
+  
+  .inp{
+  outline:none;
+  border: none;
+  background-color: transparent;
+  border-bottom-style:solid;
+  border-bottom: 0.5px solid #FF6A80;
+  padding-right: 50px;
+  font-size:25px;
+  color:#FFB6C1;
+  height: 20px;
+  flex: 0 0 200px;
+  margin-right: 10px;
+  text-align: right;
+  
+  }
+  .but{
+  background-color: white;
+  color: black;
+  border: 2px solid #e7e7e7;
+  text-align: center;
+  font-size:20px;
+  width: 100%;
+  cursor: pointer;
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+  height:45px
+  
+  
+  }
+  .but:hover {
+  background-color: #555555;
+  box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+    color: #FF6A80;
+
+  }
+  
+  .pred{
+  text-align: center;
+  font-size:40px;
+  color:red;
+  animation: blink 1s steps(1, end) infinite;
+    }
+  
+  @keyframes pred{
+    0% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  
+  label {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    text-align: right;
+    width: 400px;
+    line-height: 26px;
+    margin-bottom: 15px;
+    font-size: 25px;
+  }
+  
+  .container {
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+  justify-content: space-between;
+  text-align: justify;
+  }
+  </style>
+  
+
+</head>
+
+<body>
+ <!-- <div class="login"> -->
+	<!-- <h1>Predict Salary Analysis</h1> -->
+  <!-- 'Age','FBS', 'Urea','ALB', 'TCa', 'GPT','ALP','CA15','CEA','WBC','RBC','PLT','ESR','LDH' -->
+     <!-- Main Input For Receiving Query to our ML -->
+     <!-- Age, FBS, Urea, ALB, TCa, GPT, ALP, CA15,CEA,WBC,RBC,PLT,ESR,LDH -->
+    <form action="{{ url_for('predict')}}"method="post">
+    	<!-- <input type="text" name="Age" placeholder="1" required="required" />
+        <input type="text" name="FBS" placeholder="2" required="required" />
+		<input type="text" name="Urea" placeholder="3" required="required" />
+    <input type="text" name="ALB" placeholder="4" required="required" />
+    <input type="text" name="TCa" placeholder="5" required="required" />
+    <input type="text" name="GPT" placeholder="6" required="required" />
+    <input type="text" name="ALP" placeholder="7" required="required" />
+    <input type="text" name="CA15" placeholder="8" required="required" />
+    <input type="text" name="CEA" placeholder="9" required="required" />
+    <input type="text" name="WBC" placeholder="10" required="required" />
+    <input type="text" name="RBC" placeholder="11" required="required" />
+    <input type="text" name="PLT" placeholder="12" required="required" />
+    <input type="text" name="ESR" placeholder="13" required="required" />
+    <input type="text" name="LDH" placeholder="14" required="required" /> -->
+    
+<h1 style="text-align:center; font-size: 70px;">نموذج ذكي للتنبؤ بسرطان الثدي</h1>
+<h2 style="text-align: right; font-size: 30px;">ادخل بيانات التحاليل التالية</h2>
+<div class='container'>
+    
+<label for="v1">Age</label> 
+<input class='inp' type="text"  name="Age" required placeholder=" العمر">
+
+<label for="v2">Fasting blood sugar </label> 
+<input  class='inp'type="text"  name="FBS" required placeholder="تحليل سكر الصائم"> 
+
+<label for="v3">Blood Urea Test</label> 
+<input class='inp' type="text"  name="Urea" required placeholder="تحليل اليوريا في الدم">
+
+<label for="v4">Albumin Blood Test</label> 
+<input class='inp' type="text"  name="ALB" required placeholder="تحليل الزلال في الدم">
+
+<label for="v5">Total protein</label> 
+<input class='inp' type="text" name="TCa" required placeholder="تحليل البروتين الكلي بالدم">
+
+<label for="v6">GPT</label> 
+<input class='inp' type="text"  name="GPT" required placeholder="تحليل انزيمات الكبد">
+<!-- <input type="text" name="ALP" placeholder="7" required="required" /> -->
+  
+<label for="v7">Alkaline Phosphatase Test</label> 
+<input class='inp' type="text"  name="ALP" required placeholder="تحليل انزيم الفوسفاتاز القلوي">
+
+<label for="v8">Cancer Antigen 15</label> 
+<input class='inp' type="text"  name="CA15" required placeholder="تحليل مستضد السرطان">
+
+<label for="v9">Carcinoembryonic Antigen</label> 
+<input class='inp' type="text"  name="CEA" required placeholder="تحليل المستضد السرطاني المضغي">
+
+<label for="v10">White Blood Cell </label> 
+<input class='inp' type="text"  name="WBC" required placeholder="تحليل كريات الدم البيضاء">
+
+<label for="v11">Red Blood Cell Count Test</label> 
+<input class='inp' type="text"  name="RBC" required placeholder="تحليل تعداد خلايا الدم الحمراء">
+
+<label for="v12">Platelet Count Test</label> 
+<input class='inp' type="text"  name="PLT" required placeholder="تحليل الصفائح الدموية">
+
+<label for="v13">Erythrocyte Sedimentation Rate Test</label> 
+<input class='inp' type="text"  name="ESR" required placeholder="تحليل سرعة ترسيب خلايا الدم الحمراء">
+
+<label for="v14">Lactate Dehydrogenase Test</label> 
+<input class='inp' type="text"  name="LDH" required placeholder="تحليل نازعة هيدروجين اللاكتات">
+
+
+</div>
+
+<br>
+<!-- <br> -->
+<div>
+	<button class="but" type="submit" style:" text-align:center; ">فحص</button>
+	<!-- <p class='pred'> {{ result }} </p> -->
+  <p class='pred'> {{ prediction_text }} </p>
+</div>
+<!-- <div class="d-grid gap-2">
+  <button class="btn btn-primary" type="button">Predict</button>
+  <p class='pred'> {{ prediction_text }} </p>
+  </div> -->
+
+</form>
+        <!-- <button type="submit" class="btn btn-primary btn-block btn-large">Predict</button>
+    </form>
+
+   <br>
+   <br>
+   {{ prediction_text }} -->
+
+ <!-- </div> -->
+
+
+</body>
+</html>
