@@ -1,2 +1,2 @@
 # Doplyment
-Use streamlit library to deploy the model
+Use flask library to deploy the model
